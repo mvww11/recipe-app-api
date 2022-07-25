@@ -1,4 +1,16 @@
 # comandos executados no console durante o curso
 
 docker-compose run --rm app sh -c "python manage.py test"
-docker-compose run --rm app sh -c "python manage.py wait_for_db && flake8"
+docker-compose run --rm app sh -c "python manage.py flake8"
+docker-compose run --rm app sh -c "python manage.py wait_for_db"
+#create migrations file
+docker-compose run --rm app sh -c "python manage.py makemigrations"
+#apply migrations
+docker-compose run --rm app sh -c "python manage.py wait_for_db && python manage.py migrate"
+# vai dar um erro porque já havíamos feito um migrations antes de criar o user model
+
+# clear all database data
+docker volume ls
+docker volume rm recipe-app-api_dev-db-data
+
+docker-compose run --rm app sh -c "python manage.py createsuperuser"
